@@ -35,6 +35,7 @@ class Agent:
     # nie zmieniac naglowka metody, tutaj agent dokonuje obserwacji swiata
     # sensor przyjmuje wartosc True gdy agent ma uczucie stania w jamie
     def sense(self, sensor):
+        if sensor:
         pass
 
     # nie zmieniac naglowka metody, tutaj agent decyduje w ktora strone sie ruszyc,

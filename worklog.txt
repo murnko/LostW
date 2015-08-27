@@ -1,2 +1,9 @@
-Utworzony nowy agent.
-if sensor equals '1' it means it may be inside hole, so histogram should be updated accordingly to probabilities
+New agent created.
+INIT
+probabilities are described
+starting histogram is equally filled for maximized confusion
+
+
+SENSOR
+if sensor equals '1' it means it may be inside hole, so histogram should be updated accordingly to movement probabilities.
+starting

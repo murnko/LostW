@@ -1,13 +1,12 @@
 # Przykladowy agent do zadania 'zagubiony Wumpus'. Agent porusza sie wezykiem.
 
-import random
+from random import randint
 from action import Action
-
+import sys
 # nie zmieniac nazwy klasy
 
 
 class Agent:
-
     # nie zmieniac naglowka konstruktora, tutaj agent dostaje wszystkie informacje o srodowisku
     def __init__(self, p, pj, pn, height, width, areaMap):
 
@@ -15,20 +14,26 @@ class Agent:
         self.direction = Action.LEFT
 
         # w ten sposob mozna zapamietac zmienne obiektu
-        self.p = p
-        self.pj = pj
-        self.pn = pn
-        self.height = height
-        self.width = width
-        self.map = areaMap
+        self.p = p  # prawdodpodobienstwo zgodnosci woli i dzialania
+        self.np = (1 - p) / 4  # prawd niezgodnosci woli i dzialania
+        self.pj = pj  # prawd dobrego odczytu jamy
+        self.pn = pn  # prawd falszywego odczytu jamy
+        self.height = height  # rozmiar mapy A
+        self.width = width  # rozmiar mapy B
+        self.map = areaMap  # mapa wlasciwa
 
-        # w tym przykladzie histogram wypelniany jest tak aby na planszy wyszedl gradient
+        # w tym przykladzie histogram wypelniany rownymi wartosciami
+
+        sum_norm = self.height * self.width
+        print sum_norm
         self.hist = []
+
         for y in range(self.height):
             self.hist.append([])
             for x in range(self.width):
-                self.hist[y].append(float(y + x) / (self.width + self.height - 2))
-
+                self.hist[y].append(1.00/sum_norm)
+        print self.hist
+        sys.exit("czy histogram?")
         # dopisac reszte inicjalizacji agenta
         return
 
@@ -36,7 +41,7 @@ class Agent:
     # sensor przyjmuje wartosc True gdy agent ma uczucie stania w jamie
     def sense(self, sensor):
         if sensor:
-        pass
+            pass
 
     # nie zmieniac naglowka metody, tutaj agent decyduje w ktora strone sie ruszyc,
     # funkcja MUSI zwrocic jedna z wartosci [Action.UP, Action.DOWN, Action.LEFT, Action.RIGHT]

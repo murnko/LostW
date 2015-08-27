@@ -26,6 +26,7 @@ Długie listy argumentów można umieszczać w plikach o formacie jeden argument
 argumentów zapisaną w pliku przekazuje się do programu wykorzystując składnię polecenia:
 > launcher.py @PLIK
 
+
 Napisz program, który wczyta plik zawierający opis środowiska oraz w najkrótszym możliwie czasie znajdzie drzwi wyjściowe.
 Świat jest prostokątem, o wymiarach n wierszy na m kolumn. Wumpus porusza się w świecie wykonując ruchy Góra, Dół, Lewo,
  Prawo. Świat nie ma ścian i jest cykliczny, to znaczy, że wykonując ruch Góra w pola w pierwszym wierszu Wumpus (zwykle)

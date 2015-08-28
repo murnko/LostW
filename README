@@ -1,4 +1,4 @@
-Aby stworzyć nowego agenta najlepiej skopiować isstniejącego (na przykład random_agent.py lub
+Aby stworzyć nowego agenta najlepiej skopiować istniejącego (na przykład random_agent.py lub
 snake_agent.py) i napisać własne implementacje metod __init__, sense, move oraz histogram. Nie
 należy zmieniać nazwy klasy ani wymienionych metod (nazwę pliku oczywiście można zmieniać dowoli).
 

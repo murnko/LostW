@@ -7,3 +7,11 @@ second histogram created for storing overall history of measurements, allows cre
 ?temporary histogram is needed to keep movement record?
 
 SENSOR
+done for determined env
+
+MOVE
+done
+added alternated H-V moves to avoid permamemnt one-line movement
+
+HIST
+done for determined env

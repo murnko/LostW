@@ -1,6 +1,6 @@
 # Przykladowy agent do zadania 'zagubiony Wumpus'. Agent porusza sie wezykiem.
 
-from numpy import array, roll
+from numpy import roll, sum as npsum
 from action import Action
 import sys
 # nie zmieniac nazwy klasy
@@ -58,14 +58,18 @@ class Agent:
         if sensor:
             for y in range(self.height):
                 for x in range(self.width):
-
                     if self.map_num[y][x] == 1:
-                        self.hist_z[y][x] += 1
+                        self.hist_z[y][x] += 1*self.pj
+                    elif self.map_num[y][x] == 0:
+                        self.hist_z[y][x] += 1*self.pn
+
         else:
             for y in range(self.height):
                 for x in range(self.width):
-                    if self.map_num[y][x] == 0:
-                        self.hist_z[y][x] += 1
+                    if self.map_num[y][x] == 1:
+                        self.hist_z[y][x] += 1*(1-self.pj)
+                    elif self.map_num[y][x] == 0:
+                        self.hist_z[y][x] += 1*(1-self.pn)
 
         #  print self.hist_z
         #  print self.map_num
@@ -84,9 +88,6 @@ class Agent:
                     max_prob = self.hist_z[y][x]
                     self.belief = [y, x]
             #  awaryjny uniform tu bedzie
-
-
-        #  print self.belief
 
         if self.horizontal_done:
             self.horizontal_move = 0
@@ -122,21 +123,34 @@ class Agent:
                     move = 'u'
                 else:
                     move = 'd'
-        #  print move
         #  musi nastapic przesuniecie histogramu
-        #  print self.hist_z
-        #  print self.hist_z
+        hist_main = [[x*(self.p - ((1-self.p)/4)) for x in y] for y in self.hist_z]
+        hist_less = [[x*((1-self.p)/4) for x in y] for y in self.hist_z]
+        self.hist_z = hist_less
+        self.hist_z += roll(hist_less, 1, axis=1)
+        self.hist_z += roll(hist_less, -1, axis=1)
+        self.hist_z += roll(hist_less, 1, axis=0)
+        self.hist_z += roll(hist_less, -1, axis=0)
+
+        #  normalizacja
+        normal = npsum(self.hist_z)
+        self.hist = self.hist_z
+        for y in range(self.height):
+            for x in range(self.width):
+                self.hist[y][x] = self.hist[y][x]/normal
+
+        #  wybór ruchu
         if move == 'r':
-            self.hist_z = roll(self.hist_z, 1, axis=1)
+            self.hist_z += roll(hist_main, 1, axis=1)
             return Action.RIGHT
         elif move == 'l':
-            self.hist_z = roll(self.hist_z, -1, axis=1)
+            self.hist_z += roll(hist_main, -1, axis=1)
             return Action.LEFT
         elif move == 'u':
-            self.hist_z = roll(self.hist_z, -1, axis=0)
+            self.hist_z += roll(hist_main, -1, axis=0)
             return Action.UP
         elif move == 'd':
-            self.hist_z = roll(self.hist_z, 1, axis=0)
+            self.hist_z += roll(hist_main, 1, axis=0)
             return Action.DOWN
 
         sys.exit("czy histogram1?")

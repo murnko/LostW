@@ -1,6 +1,6 @@
 # Przykladowy agent do zadania 'zagubiony Wumpus'. Agent porusza sie wezykiem.
 
-from numpy import array
+from numpy import array, roll
 from action import Action
 import sys
 # nie zmieniac nazwy klasy
@@ -28,7 +28,6 @@ class Agent:
         self.hist = []
         self.map_num = []
         self.hist_z = []
-        self.hist_m = []
         self.exit = []
         for y in range(self.height):
             self.hist.append([])
@@ -51,11 +50,8 @@ class Agent:
                     self.exit.append(x)
                 self.map_num[y].append(pole)
 
-        # ustalenie cwiartek planszy wzgledem wyjscia
-        self.histogram = array(self.hist_z)
-        print self.map_num
-        print self.exit
-        sys.exit("czy histogram?")
+
+
         return
 
     # nie zmieniac naglowka metody, tutaj agent dokonuje obserwacji swiata
@@ -64,31 +60,41 @@ class Agent:
         if sensor:
             for y in range(self.height):
                 for x in range(self.width):
+
                     if self.map_num[y][x] == 1:
-                        self.histogram[y][x] += 1
+                        self.hist_z[y][x] += 1
         else:
             for y in range(self.height):
                 for x in range(self.width):
                     if self.map_num[y][x] == 0:
-                        self.histogram[y][x] += 1
+                        self.hist_z[y][x] += 1
+
+        print self.hist_z
+        print self.map_num
+
         pass
 
     # nie zmieniac naglowka metody, tutaj agent decyduje w ktora strone sie ruszyc,
     # funkcja MUSI zwrocic jedna z wartosci [Action.UP, Action.DOWN, Action.LEFT, Action.RIGHT]
     def move(self):
-        move = 0
         # ustalenie polozenia od najwyzszego prawdopodobienstwa, pierwszego znalezionego
         max_prob = 0
         for y in range(self.height):
             for x in range(self.width):
-                if self.histogram[y][x] > max_prob:
-                    max_prob = self.histogram[y][x]
+                if self.hist_z[y][x] > max_prob:
+                    max_prob = self.hist_z[y][x]
                     self.belief = [y, x]
-            #  awaryjny uniform
+            #  awaryjny uniform tu bedzie
         if self.belief[0] == self.exit[0]:
             self.horizontal_move = 1
         elif self.belief[1] == self.exit[1]:
             self.horizontal_move = 0
+
+
+        print self.belief
+        print self.exit
+
+
 
         if self.horizontal_move:
             if abs(self.belief[1] - self.exit[1]) > self.width/2:
@@ -104,20 +110,28 @@ class Agent:
         else:
             if abs(self.belief[0] - self.exit[0]) > self.height/2:
                 if self.belief[0] - self.exit[0]:
-                    move = 'd'
-                else:
                     move = 'u'
+                else:
+                    move = 'd'
             else:
                 if self.belief[0] - self.exit[0]:
                     move = 'u'
                 else:
                     move = 'd'
 
+        print move
+        print self.horizontal_move
+        sys.exit("czy histogram1?")
         #  musi nastapic przesuniecie histogramu
-        columns = []
-        rows = []
-        if move == 'r' or move == 'l':
-            self.histogram.transpose()
+        #  self.histogram = array(self.hist_z) <-- na potrzeby szybkiego rolla
+        if move == 'r':
+            roll(self.histogram, 1, axis=1)
+        elif move == 'l':
+            roll(self.histogram, -1, axis=1)
+        elif move == 'u':
+            roll(self.histogram, -1, axis=0)
+        elif move == 'd':
+            roll(self.histogram, 1, axis=0)
 
     # nie zmieniac naglowka metody, tutaj agent udostepnia swoj histogram (ten z filtru
     # histogramowego), musi to byc tablica (lista list, krotka krotek...) o wymarach takich jak

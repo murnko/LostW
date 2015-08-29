@@ -79,6 +79,7 @@ class Agent:
     def move(self):
         # ustalenie polozenia od najwyzszego prawdopodobienstwa, pierwszego znalezionego
         max_prob = 0
+        self.hist_z[9][4] = 3
         for y in range(self.height):
             for x in range(self.width):
                 if self.hist_z[y][x] > max_prob:
@@ -90,31 +91,28 @@ class Agent:
         elif self.belief[1] == self.exit[1]:
             self.horizontal_move = 0
 
-
         print self.belief
         print self.exit
 
-
-
         if self.horizontal_move:
             if abs(self.belief[1] - self.exit[1]) > self.width/2:
-                if self.belief[1] - self.exit[1]:
+                if (self.belief[1] - self.exit[1]) > 0:
                     move = 'r'
                 else:
                     move = 'l'
             else:
-                if self.belief[1] - self.exit[1]:
+                if (self.belief[1] - self.exit[1]) > 0:
                     move = 'l'
                 else:
                     move = 'r'
         else:
             if abs(self.belief[0] - self.exit[0]) > self.height/2:
-                if self.belief[0] - self.exit[0]:
-                    move = 'u'
-                else:
+                if (self.belief[0] - self.exit[0]) > 0:
                     move = 'd'
+                else:
+                    move = 'u'
             else:
-                if self.belief[0] - self.exit[0]:
+                if (self.belief[0] - self.exit[0]) > 0:
                     move = 'u'
                 else:
                     move = 'd'
